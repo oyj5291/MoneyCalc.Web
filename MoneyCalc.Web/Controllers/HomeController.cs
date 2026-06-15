@@ -11,7 +11,26 @@ namespace MoneyCalc.Web.Controllers
             return View();
         }
 
+        [HttpGet("/privacy")]
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [HttpGet("/terms")]
+        public IActionResult Terms()
+        {
+            return View();
+        }
+
+        [HttpGet("/about")]
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        [HttpGet("/contact")]
+        public IActionResult Contact()
         {
             return View();
         }

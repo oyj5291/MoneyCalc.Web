@@ -56,7 +56,15 @@
     </div>
 
     <footer class="border-top footer text-muted bg-white">
-        <div class="container">&copy; 2026 머니계산연구소</div>
+        <div class="container footer-content">
+            <span>&copy; 2026 머니계산연구소</span>
+            <nav class="footer-links" aria-label="사이트 안내">
+                <a asp-controller="Home" asp-action="About">사이트 소개</a>
+                <a asp-controller="Home" asp-action="Privacy">개인정보처리방침</a>
+                <a asp-controller="Home" asp-action="Terms">이용약관</a>
+                <a asp-controller="Home" asp-action="Contact">문의하기</a>
+            </nav>
+        </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

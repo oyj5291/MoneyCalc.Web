@@ -223,8 +223,107 @@ a.calculator-card:hover {
   margin-top: 0;
 }
 
+.policy-page {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 2.5rem;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 1rem rgba(31, 45, 61, 0.08);
+  line-height: 1.8;
+}
+
+.policy-page h1 {
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.policy-page h2 {
+  margin-top: 2.25rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.policy-page p,
+.policy-page li {
+  color: #4f5b6e;
+}
+
+.policy-label {
+  margin-bottom: 0.5rem;
+  color: #0d6efd !important;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.policy-lead {
+  font-size: 1.1rem;
+}
+
+.info-tile,
+.contact-card {
+  height: 100%;
+  padding: 1.25rem;
+  background: #f6f8fb;
+  border: 1px solid #e5ebf5;
+  border-radius: 0.85rem;
+}
+
+.info-tile strong,
+.info-tile span {
+  display: block;
+}
+
+.info-tile span {
+  margin-top: 0.4rem;
+  color: #5d6778;
+}
+
+.contact-card h2 {
+  margin-top: 0;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-links a {
+  color: #6c757d;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: #0d6efd;
+}
+
 @media (max-width: 575.98px) {
-  .finance-article {
+  .finance-article,
+  .policy-page {
     padding: 1.25rem;
+  }
+
+  .footer {
+    position: static;
+    padding: 1rem 0;
+    line-height: 1.8;
+  }
+
+  .footer-content {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  body {
+    margin-bottom: 0;
   }
 }
