@@ -284,6 +284,25 @@ a.calculator-card:hover {
   margin-top: 0;
 }
 
+.contact-email {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.contact-email span {
+  color: #6c757d;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.contact-email a {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
 .footer-content {
   display: flex;
   align-items: center;
