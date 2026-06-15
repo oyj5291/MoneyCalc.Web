@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "단리와 복리 계산법";
+    ViewData["Description"] = "단리, 월복리, 연복리의 차이와 기간이 길어질수록 복리 효과가 커지는 이유를 설명합니다.";
+}
+
+<article class="finance-article">
+    <a class="article-back" asp-action="Index">← 금융정보</a>
+    <h1>단리와 복리 계산법</h1>
+    <p class="article-lead">단리는 원금에만 이자가 붙고, 복리는 발생한 이자에도 다시 이자가 붙습니다.</p>
+
+    <h2>단리 계산</h2>
+    <div class="formula-box">이자 = 원금 × 연이율 × 기간</div>
+    <p>원금 1,000만원을 연 3.5%로 1년 예치하면 세전이자는 35만원입니다.</p>
+
+    <h2>복리 계산</h2>
+    <div class="formula-box">만기금액 = 원금 × (1 + 기간별 이율)<sup>기간</sup></div>
+    <p>
+        월복리는 매월, 연복리는 매년 이자를 원금에 더합니다.
+        기간이 짧으면 차이가 작지만 기간이 길고 금리가 높을수록 복리 효과가 커집니다.
+    </p>
+
+    <h2>세후 금액도 확인해야 합니다</h2>
+    <p>
+        표시된 세전이자에서 일반과세, 세금우대 또는 비과세 조건에 따라 세금이 달라집니다.
+        상품을 비교할 때는 금리뿐 아니라 세후 만기수령액을 함께 확인하는 편이 좋습니다.
+    </p>
+
+    <div class="article-cta d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" asp-controller="Deposit" asp-action="Index">예금 단리·복리 계산</a>
+        <a class="btn btn-outline-primary" asp-controller="Savings" asp-action="Index">적금 이자 계산</a>
+    </div>
+</article>

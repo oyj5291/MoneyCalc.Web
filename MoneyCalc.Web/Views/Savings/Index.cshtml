@@ -1,0 +1,177 @@
+@model SavingsCalculatorViewModel
+
+@{
+    ViewData["Title"] = "적금 계산기";
+    ViewData["Description"] = "월 납입액, 금리, 기간을 입력해 적금 원금합계, 세전·세후이자와 만기수령액을 계산해 보세요.";
+
+    var interestTypeName = Model.Result?.InterestType == SavingsInterestType.MonthlyCompound
+        ? "월복리"
+        : "단리";
+
+    var taxTypeName = Model.Result?.TaxType switch
+    {
+        TaxType.TaxPreferred => "세금우대",
+        TaxType.TaxExempt => "비과세",
+        _ => "일반과세"
+    };
+}
+
+<div class="row justify-content-center">
+    <div class="col-xl-10">
+        <div class="mb-4">
+            <h1 class="h2 fw-bold">적금 계산기</h1>
+            <p class="text-secondary">매월 납입하는 적금의 세전·세후이자와 만기수령액을 계산합니다.</p>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <form asp-action="Index" method="post" class="row g-4 calculator-form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="col-lg-6">
+                        <label asp-for="MonthlyPayment" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="MonthlyPayment" class="form-control money-input"
+                                   inputmode="numeric" autocomplete="off" />
+                            <span class="input-group-text">원</span>
+                        </div>
+                        <span asp-validation-for="MonthlyPayment" class="text-danger"></span>
+                        <div class="quick-options mt-2" aria-label="월 납입액 빠른 선택">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="MonthlyPayment" data-value="100000">10만</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="MonthlyPayment" data-value="300000">30만</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="MonthlyPayment" data-value="500000">50만</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="MonthlyPayment" data-value="1000000">100만</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="MonthlyPayment" data-value="2000000">200만</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <label asp-for="AnnualInterestRate" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="AnnualInterestRate" class="form-control" step="0.01" inputmode="decimal" />
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <span asp-validation-for="AnnualInterestRate" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <label asp-for="TermMonths" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="TermMonths" class="form-control" inputmode="numeric" />
+                            <span class="input-group-text">개월</span>
+                        </div>
+                        <span asp-validation-for="TermMonths" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="quick-options" aria-label="적금 기간 빠른 선택">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="TermMonths" data-value="6">6개월</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="TermMonths" data-value="12">1년</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="TermMonths" data-value="24">2년</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="TermMonths" data-value="36">3년</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="TermMonths" data-value="60">5년</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="InterestType" class="form-label fw-semibold"></label>
+                        <select asp-for="InterestType" class="form-select">
+                            <option value="@SavingsInterestType.Simple">단리</option>
+                            <option value="@SavingsInterestType.MonthlyCompound">월복리</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="TaxType" class="form-label fw-semibold"></label>
+                        <select asp-for="TaxType" class="form-select">
+                            <option value="@TaxType.General">일반과세 (15.4%)</option>
+                            <option value="@TaxType.TaxExempt">비과세 (0%)</option>
+                            <option value="@TaxType.TaxPreferred">세금우대 (9.5%)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">계산하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @if (Model.Result is not null)
+        {
+            <section aria-labelledby="savings-result-heading" class="mb-5">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                    <h2 id="savings-result-heading" class="h4 fw-bold mb-0">계산 결과</h2>
+                    <span class="badge rounded-pill text-bg-primary">@interestTypeName</span>
+                    <span class="badge rounded-pill text-bg-light">@taxTypeName</span>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-12">
+                        <div class="result-card result-card-primary">
+                            <span>세후 만기수령액</span>
+                            <strong>@Model.Result.MaturityAmount.ToString("N0")원</strong>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="result-card">
+                            <span>총 납입원금</span>
+                            <strong>@Model.Result.TotalPrincipal.ToString("N0")원</strong>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="result-card">
+                            <span>세전이자</span>
+                            <strong>@Model.Result.GrossInterest.ToString("N0")원</strong>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="result-card">
+                            <span>이자소득세</span>
+                            <strong>@(Model.Result.Tax > 0 ? $"-{Model.Result.Tax:N0}원" : "0원")</strong>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="result-card">
+                            <span>세후이자</span>
+                            <strong>@Model.Result.NetInterest.ToString("N0")원</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-light border mb-0">
+                    매월 초 납입 기준으로 계산했으며, @taxTypeName 세율 @(Model.Result.TaxRate.ToString("0.0"))%를 적용했습니다.
+                    실제 상품의 납입일과 이자 계산 방식에 따라 금액은 달라질 수 있습니다.
+                </div>
+            </section>
+        }
+
+        <section class="loan-guide card border-0 shadow-sm" aria-labelledby="savings-guide-heading">
+            <div class="card-body p-4 p-md-5">
+                <h2 id="savings-guide-heading" class="h3 fw-bold mb-4">적금 이자 계산 안내</h2>
+
+                <h3 class="h5 fw-bold">적금 이자는 어떻게 계산하나요?</h3>
+                <p>
+                    적금은 매월 납입한 금액마다 만기까지 남은 기간이 다릅니다.
+                    첫 회차 납입금은 가장 오래 이자를 받고 마지막 회차 납입금은 가장 짧게 이자를 받습니다.
+                </p>
+
+                <h3 class="h5 fw-bold mt-4">단리와 월복리의 차이</h3>
+                <p>
+                    단리는 각 납입 원금에 대해서만 이자를 계산합니다.
+                    월복리는 납입금별로 발생한 이자가 매월 원금에 더해져 다음 이자를 계산합니다.
+                </p>
+
+                <h3 class="h5 fw-bold mt-4">적금 이자 세금</h3>
+                <p class="mb-0">
+                    일반과세는 15.4%, 세금우대는 9.5%, 비과세는 0%로 계산합니다.
+                    실제 세율과 비과세 적용 여부는 금융상품 및 가입 자격에 따라 달라질 수 있습니다.
+                </p>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

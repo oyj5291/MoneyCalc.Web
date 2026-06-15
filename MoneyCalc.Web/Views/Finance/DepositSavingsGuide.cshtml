@@ -1,0 +1,57 @@
+@{
+    ViewData["Title"] = "예금과 적금의 차이";
+    ViewData["Description"] = "예금과 적금의 납입 방식, 이자 계산, 활용 목적과 만기수령액 차이를 설명합니다.";
+}
+
+<article class="finance-article">
+    <a class="article-back" asp-action="Index">← 금융정보</a>
+    <h1>예금과 적금의 차이</h1>
+    <p class="article-lead">예금은 가진 목돈을 맡기고, 적금은 매월 돈을 모으는 상품입니다.</p>
+
+    <h2>한눈에 비교하기</h2>
+    <div class="table-responsive">
+        <table class="table comparison-table">
+            <thead>
+                <tr>
+                    <th>구분</th>
+                    <th>예금</th>
+                    <th>적금</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>납입 방식</th>
+                    <td>목돈을 한 번에 예치</td>
+                    <td>매월 일정 금액 납입</td>
+                </tr>
+                <tr>
+                    <th>주요 목적</th>
+                    <td>보유 자금 운용</td>
+                    <td>목돈 마련</td>
+                </tr>
+                <tr>
+                    <th>이자 계산</th>
+                    <td>전체 원금이 전 기간 이자를 받음</td>
+                    <td>납입 회차마다 이자 기간이 다름</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>같은 금리라도 이자가 다른 이유</h2>
+    <p>
+        예금은 처음부터 전체 원금이 예치되지만 적금은 매월 원금이 쌓입니다.
+        따라서 표시 금리가 같더라도 실제 세전이자와 만기수령액은 서로 다릅니다.
+    </p>
+
+    <h2>어떤 상품을 선택해야 할까요?</h2>
+    <p>
+        이미 목돈이 있다면 예금을, 매월 소득에서 일정 금액을 모으려면 적금을 우선 비교할 수 있습니다.
+        중도해지 시 약정 금리보다 낮은 금리가 적용될 수 있으므로 기간도 함께 확인해야 합니다.
+    </p>
+
+    <div class="article-cta d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" asp-controller="Deposit" asp-action="Index">예금 계산기</a>
+        <a class="btn btn-outline-primary" asp-controller="Savings" asp-action="Index">적금 계산기</a>
+    </div>
+</article>

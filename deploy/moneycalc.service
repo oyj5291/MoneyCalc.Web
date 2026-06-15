@@ -1,0 +1,22 @@
+[Unit]
+Description=MoneyCalc.Web ASP.NET Core service
+After=network.target
+
+[Service]
+WorkingDirectory=/var/www/moneycalc
+ExecStart=/usr/bin/dotnet /var/www/moneycalc/MoneyCalc.Web.dll
+User=www-data
+Group=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://127.0.0.1:5000
+Restart=always
+RestartSec=5
+KillSignal=SIGINT
+SyslogIdentifier=moneycalc
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

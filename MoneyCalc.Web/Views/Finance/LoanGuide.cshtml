@@ -1,0 +1,57 @@
+@{
+    ViewData["Title"] = "원리금균등상환 vs 원금균등상환";
+    ViewData["Description"] = "원리금균등상환과 원금균등상환의 월 납입액, 총이자, 장단점을 비교합니다.";
+}
+
+<article class="finance-article">
+    <a class="article-back" asp-action="Index">← 금융정보</a>
+    <h1>원리금균등상환 vs 원금균등상환</h1>
+    <p class="article-lead">두 방식은 같은 원금과 금리라도 월 납입액과 총이자가 달라집니다.</p>
+
+    <h2>핵심 차이</h2>
+    <div class="table-responsive">
+        <table class="table comparison-table">
+            <thead>
+                <tr>
+                    <th>구분</th>
+                    <th>원리금균등상환</th>
+                    <th>원금균등상환</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>월 납입액</th>
+                    <td>대체로 일정</td>
+                    <td>처음에는 크고 점차 감소</td>
+                </tr>
+                <tr>
+                    <th>초기 부담</th>
+                    <td>상대적으로 낮음</td>
+                    <td>상대적으로 높음</td>
+                </tr>
+                <tr>
+                    <th>총이자</th>
+                    <td>상대적으로 많음</td>
+                    <td>상대적으로 적음</td>
+                </tr>
+                <tr>
+                    <th>자금 계획</th>
+                    <td>일정해 관리하기 쉬움</td>
+                    <td>초기 상환 여력이 중요</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>원리금균등상환이 적합한 경우</h2>
+    <p>매월 지출을 일정하게 유지하고 싶거나 초기 상환 부담을 낮추고 싶을 때 고려할 수 있습니다.</p>
+
+    <h2>원금균등상환이 적합한 경우</h2>
+    <p>초기에 더 많이 상환할 여력이 있고 전체 대출 기간의 이자 부담을 줄이고 싶을 때 유리할 수 있습니다.</p>
+
+    <div class="article-cta">
+        <h2 class="h4">내 조건으로 비교해 보세요</h2>
+        <p>대출 원금, 금리와 기간을 입력하면 두 방식의 월별 상환 내역을 확인할 수 있습니다.</p>
+        <a class="btn btn-primary" asp-controller="Loan" asp-action="Index">대출 계산기 열기</a>
+    </div>
+</article>

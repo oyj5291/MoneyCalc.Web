@@ -1,0 +1,230 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-color: #f6f8fb;
+  color: #172033;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #eef4ff, #ffffff);
+  border: 1px solid #e5ebf5;
+  border-radius: 1.5rem;
+}
+
+.calculator-card {
+  border: 0;
+  box-shadow: 0 0.25rem 1rem rgba(31, 45, 61, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+a.calculator-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.75rem 1.5rem rgba(31, 45, 61, 0.13);
+}
+
+.calculator-icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  color: #0d6efd;
+  background: #eaf2ff;
+  border-radius: 0.85rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.disabled-card {
+  opacity: 0.72;
+}
+
+.card-shortcut {
+  display: inline-block;
+  color: #0d6efd;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.financial-info {
+  background: #fff;
+  border: 1px solid #e5ebf5;
+}
+
+.result-card {
+  height: 100%;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid #e5ebf5;
+  border-radius: 0.85rem;
+}
+
+.result-card span {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.result-card strong {
+  display: block;
+  font-size: 1.2rem;
+}
+
+.result-card-primary {
+  color: #fff;
+  background: linear-gradient(135deg, #0d6efd, #0a58ca);
+  border-color: transparent;
+  box-shadow: 0 0.75rem 1.5rem rgba(13, 110, 253, 0.2);
+}
+
+.result-card-primary span {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.result-card-primary strong {
+  font-size: clamp(1.65rem, 4vw, 2.35rem);
+}
+
+.schedule-table {
+  max-height: 32rem;
+}
+
+.schedule-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.quick-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.quick-options .btn.active {
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.grace-period-disabled {
+  opacity: 0.55;
+}
+
+.loan-guide {
+  line-height: 1.8;
+}
+
+.loan-guide p {
+  color: #5d6778;
+}
+
+.article-card {
+  border: 0;
+  box-shadow: 0 0.25rem 1rem rgba(31, 45, 61, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.article-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.75rem 1.5rem rgba(31, 45, 61, 0.13);
+}
+
+.article-category {
+  color: #0d6efd;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.finance-article {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 1rem rgba(31, 45, 61, 0.08);
+  line-height: 1.8;
+}
+
+.finance-article h1 {
+  margin: 1rem 0;
+  font-weight: 700;
+}
+
+.finance-article h2 {
+  margin-top: 2.5rem;
+  font-size: 1.45rem;
+  font-weight: 700;
+}
+
+.finance-article p,
+.finance-article li {
+  color: #4f5b6e;
+}
+
+.article-back {
+  color: #6c757d;
+  text-decoration: none;
+}
+
+.article-lead {
+  font-size: 1.15rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+  min-width: 9rem;
+  padding: 0.9rem;
+}
+
+.formula-box {
+  padding: 1rem 1.25rem;
+  color: #0a58ca;
+  background: #eef4ff;
+  border-radius: 0.75rem;
+  font-weight: 700;
+}
+
+.article-cta {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  background: #f6f8fb;
+  border-radius: 0.85rem;
+}
+
+.article-cta h2 {
+  margin-top: 0;
+}
+
+@media (max-width: 575.98px) {
+  .finance-article {
+    padding: 1.25rem;
+  }
+}

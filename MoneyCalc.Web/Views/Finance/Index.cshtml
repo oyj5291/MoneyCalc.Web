@@ -1,0 +1,49 @@
+@{
+    ViewData["Title"] = "금융정보";
+    ViewData["Description"] = "대출 상환 방식, 예금과 적금의 차이, 단리와 복리, 연봉 실수령액을 쉽게 설명합니다.";
+}
+
+<section class="mb-5">
+    <span class="badge text-bg-primary mb-3">생활 금융 가이드</span>
+    <h1 class="display-6 fw-bold">금융정보</h1>
+    <p class="lead text-secondary">계산 전에 알아두면 좋은 금융 개념을 쉽게 정리했습니다.</p>
+</section>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <a class="article-card card h-100 text-decoration-none" asp-action="LoanGuide">
+            <div class="card-body p-4">
+                <span class="article-category">대출</span>
+                <h2 class="h4 text-dark mt-2">원리금균등상환 vs 원금균등상환</h2>
+                <p class="text-secondary mb-0">월 납입액, 총이자와 초기 부담의 차이를 비교합니다.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a class="article-card card h-100 text-decoration-none" asp-action="DepositSavingsGuide">
+            <div class="card-body p-4">
+                <span class="article-category">예금·적금</span>
+                <h2 class="h4 text-dark mt-2">예금과 적금의 차이</h2>
+                <p class="text-secondary mb-0">목돈을 맡기는 예금과 매월 모으는 적금의 차이를 알아봅니다.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a class="article-card card h-100 text-decoration-none" asp-action="InterestGuide">
+            <div class="card-body p-4">
+                <span class="article-category">이자</span>
+                <h2 class="h4 text-dark mt-2">단리와 복리 계산법</h2>
+                <p class="text-secondary mb-0">이자가 원금에만 붙는 경우와 이자에도 붙는 경우를 비교합니다.</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a class="article-card card h-100 text-decoration-none" asp-action="Salary5000Guide">
+            <div class="card-body p-4">
+                <span class="article-category">연봉</span>
+                <h2 class="h4 text-dark mt-2">연봉 5000만원 실수령액</h2>
+                <p class="text-secondary mb-0">월 급여에서 사회보험료와 세금이 어떻게 공제되는지 설명합니다.</p>
+            </div>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,259 @@
+@model LoanCalculatorViewModel
+
+@{
+    ViewData["Title"] = "대출이자 계산기";
+    ViewData["Description"] = "원리금균등상환, 원금균등상환, 만기일시상환 방식별 월 납입액과 총이자를 계산해 보세요.";
+
+    var repaymentTypeName = Model.Result?.RepaymentType switch
+    {
+        RepaymentType.EqualPayment => "원리금균등상환",
+        RepaymentType.EqualPrincipal => "원금균등상환",
+        RepaymentType.Bullet => "만기일시상환",
+        _ => string.Empty
+    };
+}
+
+<div class="row justify-content-center">
+    <div class="col-xl-10">
+        <div class="mb-4">
+            <h1 class="h2 fw-bold">대출이자 계산기</h1>
+            <p class="text-secondary">상환 조건을 입력하면 월별 원금과 이자를 계산합니다.</p>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <form asp-action="Index" method="post" class="row g-4" id="loan-calculator-form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="col-lg-6">
+                        <label asp-for="Principal" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="Principal" class="form-control money-input"
+                                   inputmode="numeric" autocomplete="off" />
+                            <span class="input-group-text">원</span>
+                        </div>
+                        <span asp-validation-for="Principal" class="text-danger"></span>
+                        <div class="quick-options mt-2" aria-label="대출 원금 빠른 선택">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="Principal" data-value="10000000">1천만</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="Principal" data-value="30000000">3천만</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="Principal" data-value="50000000">5천만</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="Principal" data-value="100000000">1억</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="Principal" data-value="300000000">3억</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="Principal" data-value="500000000">5억</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="Principal" data-value="1000000000">10억</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <label asp-for="AnnualInterestRate" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="AnnualInterestRate" class="form-control" step="0.01" inputmode="decimal" />
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <span asp-validation-for="AnnualInterestRate" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <label asp-for="TermMonths" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="TermMonths" class="form-control" inputmode="numeric" />
+                            <span class="input-group-text">개월</span>
+                        </div>
+                        <span asp-validation-for="TermMonths" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="quick-options" aria-label="대출 기간 빠른 선택">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="TermMonths" data-value="12">1년</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="TermMonths" data-value="36">3년</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="TermMonths" data-value="60">5년</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="TermMonths" data-value="120">10년</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="TermMonths" data-value="240">20년</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="TermMonths" data-value="360">30년</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-7">
+                        <label asp-for="RepaymentType" class="form-label fw-semibold"></label>
+                        <select asp-for="RepaymentType" class="form-select">
+                            <option value="@RepaymentType.EqualPayment">원리금균등상환</option>
+                            <option value="@RepaymentType.EqualPrincipal">원금균등상환</option>
+                            <option value="@RepaymentType.Bullet">만기일시상환</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-5" id="grace-period-field">
+                        <label asp-for="GracePeriodMonths" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="GracePeriodMonths" class="form-control" inputmode="numeric" />
+                            <span class="input-group-text">개월</span>
+                        </div>
+                        <span asp-validation-for="GracePeriodMonths" class="text-danger"></span>
+                        <div class="quick-options mt-2" aria-label="거치기간 빠른 선택">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="GracePeriodMonths" data-value="0">없음</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="GracePeriodMonths" data-value="12">12개월</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="GracePeriodMonths" data-value="24">24개월</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-input="GracePeriodMonths" data-value="36">36개월</button>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">계산하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @if (Model.Result is not null)
+        {
+            <section aria-labelledby="result-heading" class="mb-5">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                    <h2 id="result-heading" class="h4 fw-bold mb-0">계산 결과</h2>
+                    <span class="badge rounded-pill text-bg-primary">@repaymentTypeName</span>
+                    @if (Model.Result.GracePeriodMonths > 0)
+                    {
+                        <span class="badge rounded-pill text-bg-light">거치 @(Model.Result.GracePeriodMonths)개월</span>
+                    }
+                </div>
+
+                <div class="row g-3 mb-4">
+                    @if (Model.Result.RepaymentType == RepaymentType.EqualPayment)
+                    {
+                        <div class="col-sm-4">
+                            <div class="result-card result-card-primary">
+                                <span>월 납입액</span>
+                                <strong>@Model.Result.MonthlyPayment.ToString("N0")원</strong>
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Result.RepaymentType == RepaymentType.EqualPrincipal)
+                    {
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="result-card">
+                                <span>첫 달 납입액</span>
+                                <strong>@Model.Result.FirstPayment.ToString("N0")원</strong>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="result-card">
+                                <span>마지막 달 납입액</span>
+                                <strong>@Model.Result.LastPayment.ToString("N0")원</strong>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="result-card">
+                                <span>매월 이자</span>
+                                <strong>@Model.Result.FirstPayment.ToString("N0")원</strong>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="result-card">
+                                <span>만기 납입액</span>
+                                <strong>@Model.Result.LastPayment.ToString("N0")원</strong>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="@(Model.Result.RepaymentType == RepaymentType.EqualPayment ? "col-sm-4" : "col-sm-6 col-lg-3")">
+                        <div class="result-card">
+                            <span>총 이자</span>
+                            <strong>@Model.Result.TotalInterest.ToString("N0")원</strong>
+                        </div>
+                    </div>
+                    <div class="@(Model.Result.RepaymentType == RepaymentType.EqualPayment ? "col-sm-4" : "col-sm-6 col-lg-3")">
+                        <div class="result-card">
+                            <span>총 상환액</span>
+                            <strong>@Model.Result.TotalPayment.ToString("N0")원</strong>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.Result.GracePeriodMonths > 0)
+                {
+                    <div class="alert alert-light border">
+                        거치기간에는 이자만 납부하고, 거치기간 종료 후 남은 기간 동안 원금을 상환합니다.
+                    </div>
+                }
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white py-3">
+                        <h3 class="h5 mb-0">월별 상환 내역</h3>
+                    </div>
+                    <div class="table-responsive schedule-table">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>회차</th>
+                                    <th>구분</th>
+                                    <th class="text-end">납입액</th>
+                                    <th class="text-end">원금</th>
+                                    <th class="text-end">이자</th>
+                                    <th class="text-end">남은 원금</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Result.Schedule)
+                                {
+                                    <tr>
+                                        <td>@item.Month</td>
+                                        <td>
+                                            @if (item.IsGracePeriod)
+                                            {
+                                                <span class="badge text-bg-light">이자 납부</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-secondary">원금 상환</span>
+                                            }
+                                        </td>
+                                        <td class="text-end">@item.Payment.ToString("N0")원</td>
+                                        <td class="text-end">@item.Principal.ToString("N0")원</td>
+                                        <td class="text-end">@item.Interest.ToString("N0")원</td>
+                                        <td class="text-end">@item.Balance.ToString("N0")원</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        }
+
+        <section class="loan-guide card border-0 shadow-sm" aria-labelledby="loan-guide-heading">
+            <div class="card-body p-4 p-md-5">
+                <h2 id="loan-guide-heading" class="h3 fw-bold mb-4">대출 상환 방식 안내</h2>
+
+                <h3 class="h5 fw-bold">원리금균등상환이란?</h3>
+                <p>
+                    원리금균등상환은 대출 기간 동안 원금과 이자를 합한 금액을 매월 동일하게 납부하는 방식입니다.
+                    월 납입액이 일정해 자금 계획을 세우기 쉽습니다.
+                </p>
+
+                <h3 class="h5 fw-bold mt-4">원금균등상환이란?</h3>
+                <p>
+                    원금균등상환은 매월 같은 원금을 상환하고 남은 원금에 대한 이자를 계산하는 방식입니다.
+                    시간이 지날수록 이자와 월 납입액이 감소합니다.
+                </p>
+
+                <h3 class="h5 fw-bold mt-4">만기일시상환이란?</h3>
+                <p>
+                    만기일시상환은 대출 기간 동안 이자만 납부하고 만기에 원금을 한 번에 상환하는 방식입니다.
+                    만기 시 큰 금액을 상환해야 하므로 자금 계획이 필요합니다.
+                </p>
+
+                <h3 class="h5 fw-bold mt-4">거치기간이란?</h3>
+                <p class="mb-0">
+                    거치기간은 일정 기간 원금 상환 없이 이자만 납부하는 기간입니다.
+                    초기 부담은 줄지만 원금 상환 기간이 짧아져 이후 월 납입액과 총이자가 늘어날 수 있습니다.
+                </p>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
