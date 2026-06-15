@@ -1,6 +1,6 @@
 # Oracle Cloud Ubuntu 배포
 
-이 문서는 `moneycalclab.com`을 기준으로 작성되었습니다. 다른 도메인을 사용할 경우
+이 문서는 `moneycalc.ai.kr`을 기준으로 작성되었습니다. 다른 도메인을 사용할 경우
 `nginx-moneycalc.conf`의 `server_name`을 먼저 변경합니다.
 
 ## 1. 로컬에서 게시
@@ -77,7 +77,7 @@ sudo ufw allow 'Nginx Full'
 sudo ufw status
 ```
 
-DNS에서 `moneycalclab.com`과 `www.moneycalclab.com`의 A 레코드를 Oracle VM 공인
+DNS에서 `moneycalc.ai.kr`과 `www.moneycalc.ai.kr`의 A 레코드를 Oracle VM 공인
 IP로 연결한 후 HTTP 접속을 확인합니다.
 
 ## 5. HTTPS 적용
@@ -85,16 +85,16 @@ IP로 연결한 후 HTTP 접속을 확인합니다.
 DNS 전파와 HTTP 접속이 확인된 뒤 실행합니다.
 
 ```bash
-sudo certbot --nginx -d moneycalclab.com -d www.moneycalclab.com
+sudo certbot --nginx -d moneycalc.ai.kr -d www.moneycalc.ai.kr
 sudo certbot renew --dry-run
 ```
 
 최종 확인:
 
 ```bash
-curl --fail https://moneycalclab.com/healthz
-curl --fail https://moneycalclab.com/sitemap.xml
-curl --fail https://moneycalclab.com/robots.txt
+curl --fail https://moneycalc.ai.kr/healthz
+curl --fail https://moneycalc.ai.kr/sitemap.xml
+curl --fail https://moneycalc.ai.kr/robots.txt
 ```
 
 ## 6. 이후 버전 업데이트
