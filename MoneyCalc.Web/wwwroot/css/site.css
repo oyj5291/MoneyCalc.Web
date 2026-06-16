@@ -303,6 +303,107 @@ a.calculator-card:hover {
   font-weight: 700;
 }
 
+.board-page {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.board-card,
+.board-form,
+.board-detail,
+.board-delete,
+.board-guide {
+  background: #fff;
+  border: 1px solid #e5ebf5;
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 1rem rgba(31, 45, 61, 0.08);
+}
+
+.board-form,
+.board-detail,
+.board-delete,
+.board-guide {
+  padding: 1.5rem;
+}
+
+.board-table th {
+  color: #4f5b6e;
+  background: #f8fafc;
+  font-size: 0.92rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.board-table td {
+  border-color: #edf1f7;
+}
+
+.board-number {
+  width: 5rem;
+}
+
+.board-author {
+  width: 8rem;
+}
+
+.board-date {
+  width: 8rem;
+}
+
+.board-views {
+  width: 5rem;
+}
+
+.board-title {
+  color: #172033;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.board-title:hover {
+  color: #0d6efd;
+}
+
+.board-editor {
+  min-height: 22rem;
+  resize: vertical;
+}
+
+.board-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.board-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  color: #6c757d;
+  font-size: 0.95rem;
+}
+
+.board-content {
+  min-height: 16rem;
+  color: #263247;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.board-guide {
+  color: #4f5b6e;
+  line-height: 1.8;
+}
+
+.board-guide strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #172033;
+}
+
 .footer-content {
   display: flex;
   align-items: center;
@@ -327,8 +428,23 @@ a.calculator-card:hover {
 
 @media (max-width: 575.98px) {
   .finance-article,
-  .policy-page {
+  .policy-page,
+  .board-form,
+  .board-detail,
+  .board-delete,
+  .board-guide {
     padding: 1.25rem;
+  }
+
+  .board-number,
+  .board-author,
+  .board-views {
+    display: none;
+  }
+
+  .board-date {
+    width: 6.5rem;
+    font-size: 0.85rem;
   }
 
   .footer {

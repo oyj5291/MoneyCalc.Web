@@ -16,6 +16,7 @@ public class SeoController : Controller
         "/privacy",
         "/terms",
         "/contact",
+        "/Board",
         "/Finance",
         "/Finance/LoanGuide",
         "/Finance/DepositSavingsGuide",

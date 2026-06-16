@@ -8,8 +8,17 @@ builder.Services.AddScoped<MoneyCalc.Web.Services.ILoanCalculatorService, MoneyC
 builder.Services.AddScoped<MoneyCalc.Web.Services.IDepositCalculatorService, MoneyCalc.Web.Services.DepositCalculatorService>();
 builder.Services.AddScoped<MoneyCalc.Web.Services.ISavingsCalculatorService, MoneyCalc.Web.Services.SavingsCalculatorService>();
 builder.Services.AddScoped<MoneyCalc.Web.Services.ISalaryCalculatorService, MoneyCalc.Web.Services.SalaryCalculatorService>();
+builder.Services.AddSingleton<MoneyCalc.Web.Services.IBoardPasswordHasher, MoneyCalc.Web.Services.BoardPasswordHasher>();
+builder.Services.AddSingleton<MoneyCalc.Web.Services.IBoardRepository, MoneyCalc.Web.Services.PostgresBoardRepository>();
 
 var app = builder.Build();
+
+if (!string.IsNullOrWhiteSpace(app.Configuration.GetConnectionString("BoardDatabase")))
+{
+    using var scope = app.Services.CreateScope();
+    var boardRepository = scope.ServiceProvider.GetRequiredService<MoneyCalc.Web.Services.IBoardRepository>();
+    await boardRepository.EnsureCreatedAsync();
+}
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {

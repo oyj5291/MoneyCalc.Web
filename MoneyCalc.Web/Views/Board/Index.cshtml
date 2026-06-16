@@ -1,0 +1,102 @@
+@model BoardIndexViewModel
+
+@{
+    var startPage = Math.Max(1, Model.CurrentPage - 4);
+    var endPage = Math.Min(Model.TotalPages, startPage + 8);
+    startPage = Math.Max(1, endPage - 8);
+}
+
+<section class="board-page">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <p class="policy-label">COMMUNITY</p>
+            <h1 class="h2 fw-bold mb-2">자유게시판</h1>
+            <p class="text-secondary mb-0">금융 계산, 대출·예금·연봉 관련 질문과 정보를 자유롭게 나누는 공간입니다.</p>
+        </div>
+        <a class="btn btn-primary" asp-controller="Board" asp-action="Write">글쓰기</a>
+    </div>
+
+    @if (TempData["BoardMessage"] is string message)
+    {
+        <div class="alert alert-success" role="alert">@message</div>
+    }
+
+    @if (!Model.IsConfigured)
+    {
+        <div class="alert alert-warning" role="alert">
+            게시판 데이터베이스 연결 문자열이 아직 설정되지 않았습니다.
+        </div>
+    }
+    else
+    {
+        <div class="board-card">
+            <div class="table-responsive">
+                <table class="table board-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th class="text-center board-number">번호</th>
+                            <th>제목</th>
+                            <th class="text-center board-author">글쓴이</th>
+                            <th class="text-center board-date">날짜</th>
+                            <th class="text-center board-views">조회</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model.Posts.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="5" class="py-5 text-center text-secondary">아직 등록된 글이 없습니다.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var post in Model.Posts)
+                        {
+                            <tr>
+                                <td class="text-center text-secondary">@post.Id</td>
+                                <td>
+                                    <a class="board-title" asp-controller="Board" asp-action="Details" asp-route-id="@post.Id">
+                                        @post.Title
+                                    </a>
+                                </td>
+                                <td class="text-center text-secondary">@post.Author</td>
+                                <td class="text-center text-secondary">@post.CreatedAt.LocalDateTime.ToString("yyyy.MM.dd")</td>
+                                <td class="text-center text-secondary">@post.ViewCount</td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="mt-4" aria-label="자유게시판 페이지">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(Model.CurrentPage <= 1 ? "disabled" : "")">
+                        <a class="page-link" asp-controller="Board" asp-action="Index" asp-route-page="@(Model.CurrentPage - 1)">이전</a>
+                    </li>
+                    @for (var pageNumber = startPage; pageNumber <= endPage; pageNumber++)
+                    {
+                        <li class="page-item @(pageNumber == Model.CurrentPage ? "active" : "")">
+                            <a class="page-link" asp-controller="Board" asp-action="Index" asp-route-page="@pageNumber">@pageNumber</a>
+                        </li>
+                    }
+                    <li class="page-item @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link" asp-controller="Board" asp-action="Index" asp-route-page="@(Model.CurrentPage + 1)">다음</a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    }
+
+    <div class="board-guide mt-4">
+        <strong>이용 안내</strong>
+        <ul class="mb-0">
+            <li>제목은 80자, 본문은 4,000자까지 입력할 수 있습니다.</li>
+            <li>작성한 글은 등록 시 입력한 비밀번호로 삭제할 수 있습니다.</li>
+            <li>개인정보, 광고성 글, 불법 정보, 금융 사기성 내용은 등록하지 말아주세요.</li>
+        </ul>
+    </div>
+</section>
