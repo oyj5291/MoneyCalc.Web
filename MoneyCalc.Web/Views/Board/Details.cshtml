@@ -26,15 +26,14 @@
     <div class="board-delete mt-4">
         <h2 class="h5 fw-bold">게시글 삭제</h2>
         <p class="text-secondary">작성 시 입력한 비밀번호를 입력하면 게시글을 삭제할 수 있습니다.</p>
-        <form class="row g-2 align-items-start" asp-controller="Board" asp-action="Delete" asp-route-id="@Model.Post.Id" method="post">
+        <form class="board-delete-form" asp-controller="Board" asp-action="Delete" asp-route-id="@Model.Post.Id" method="post">
             <input type="hidden" name="Id" value="@Model.Post.Id" />
-            <div class="col-sm-8 col-md-5">
-                <input class="form-control" type="password" name="Password" maxlength="40" autocomplete="current-password" placeholder="삭제용 비밀번호" />
+            <div class="board-delete-password">
+                <label class="visually-hidden" for="deletePassword">삭제용 비밀번호</label>
+                <input id="deletePassword" class="form-control" type="password" name="Password" maxlength="40" autocomplete="current-password" placeholder="삭제용 비밀번호" />
                 @Html.ValidationMessage("Password", new { @class = "text-danger" })
             </div>
-            <div class="col-sm-auto">
-                <button type="submit" class="btn btn-outline-danger">삭제</button>
-            </div>
+            <button type="submit" class="btn btn-outline-danger board-delete-button">삭제</button>
         </form>
     </div>
 </section>

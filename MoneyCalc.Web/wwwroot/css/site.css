@@ -305,7 +305,7 @@ a.calculator-card:hover {
 
 .board-page {
   max-width: 64rem;
-  margin: 0 auto;
+  margin: 0 auto 3rem;
 }
 
 .board-card,
@@ -386,11 +386,27 @@ a.calculator-card:hover {
 }
 
 .board-content {
-  min-height: 16rem;
+  min-height: 12rem;
   color: #263247;
   line-height: 1.85;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.board-delete-form {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  max-width: 34rem;
+}
+
+.board-delete-password {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.board-delete-button {
+  flex: 0 0 auto;
 }
 
 .board-guide {
@@ -427,6 +443,10 @@ a.calculator-card:hover {
 }
 
 @media (max-width: 575.98px) {
+  .board-page {
+    margin-bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+
   .finance-article,
   .policy-page,
   .board-form,
@@ -447,9 +467,27 @@ a.calculator-card:hover {
     font-size: 0.85rem;
   }
 
+  .board-content {
+    min-height: 10rem;
+  }
+
+  .board-delete-form {
+    display: block;
+    max-width: none;
+  }
+
+  .board-delete-password,
+  .board-delete-button {
+    width: 100%;
+  }
+
+  .board-delete-button {
+    margin-top: 0.75rem;
+  }
+
   .footer {
     position: static;
-    padding: 1rem 0;
+    padding: 1rem 0 calc(1.5rem + env(safe-area-inset-bottom));
     line-height: 1.8;
   }
 
