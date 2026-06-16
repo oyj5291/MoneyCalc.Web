@@ -1,10 +1,10 @@
 namespace MoneyCalc.Web.Models.Board;
 
-public class BoardPost
+public class BoardComment
 {
     public int Id { get; init; }
 
-    public string Title { get; init; } = string.Empty;
+    public int PostId { get; init; }
 
     public string Author { get; init; } = string.Empty;
 
@@ -13,6 +13,4 @@ public class BoardPost
     public DateTimeOffset CreatedAt { get; init; }
 
     public DateTimeOffset? UpdatedAt { get; init; }
-
-    public int ViewCount { get; init; }
 }

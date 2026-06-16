@@ -89,11 +89,58 @@ public class BoardController(IBoardRepository boardRepository) : Controller
 
         ViewData["Title"] = post.Title;
         ViewData["Description"] = "머니계산연구소 자유게시판 게시글입니다.";
+        var comments = await boardRepository.GetCommentsAsync(id, cancellationToken);
         return View(new BoardPostDetailsViewModel
         {
             Post = post,
+            Comments = comments,
+            NewComment = new BoardCommentCreateViewModel { PostId = post.Id },
             Delete = new BoardPostDeleteViewModel { Id = post.Id }
         });
+    }
+
+    [HttpGet("{id:int}/Edit")]
+    public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken = default)
+    {
+        var post = await boardRepository.GetPostAsync(id, incrementViewCount: false, cancellationToken);
+        if (post is null)
+        {
+            return NotFound();
+        }
+
+        ViewData["Title"] = "게시글 수정";
+        return View(new BoardPostEditViewModel
+        {
+            Id = post.Id,
+            Title = post.Title,
+            Content = post.Content
+        });
+    }
+
+    [HttpPost("{id:int}/Edit")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, BoardPostEditViewModel model, CancellationToken cancellationToken = default)
+    {
+        if (id != model.Id)
+        {
+            return BadRequest();
+        }
+
+        ViewData["Title"] = "게시글 수정";
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var updated = await boardRepository.UpdatePostAsync(model, cancellationToken);
+        if (!updated)
+        {
+            ModelState.AddModelError("Password", "비밀번호가 일치하지 않습니다.");
+            return View(model);
+        }
+
+        TempData["BoardMessage"] = "게시글이 수정되었습니다.";
+        return RedirectToAction(nameof(Details), new { id = model.Id });
     }
 
     [HttpPost("{id:int}/Delete")]
@@ -114,7 +161,13 @@ public class BoardController(IBoardRepository boardRepository) : Controller
         if (!ModelState.IsValid)
         {
             ViewData["Title"] = post.Title;
-            return View("Details", new BoardPostDetailsViewModel { Post = post, Delete = model });
+            return View("Details", new BoardPostDetailsViewModel
+            {
+                Post = post,
+                Comments = await boardRepository.GetCommentsAsync(id, cancellationToken),
+                NewComment = new BoardCommentCreateViewModel { PostId = post.Id },
+                Delete = model
+            });
         }
 
         var deleted = await boardRepository.DeletePostAsync(id, model.Password, cancellationToken);
@@ -122,10 +175,120 @@ public class BoardController(IBoardRepository boardRepository) : Controller
         {
             ModelState.AddModelError("Password", "비밀번호가 일치하지 않습니다.");
             ViewData["Title"] = post.Title;
-            return View("Details", new BoardPostDetailsViewModel { Post = post, Delete = model });
+            return View("Details", new BoardPostDetailsViewModel
+            {
+                Post = post,
+                Comments = await boardRepository.GetCommentsAsync(id, cancellationToken),
+                NewComment = new BoardCommentCreateViewModel { PostId = post.Id },
+                Delete = model
+            });
         }
 
         TempData["BoardMessage"] = "게시글이 삭제되었습니다.";
         return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost("{postId:int}/Comments")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateComment(
+        int postId,
+        BoardCommentCreateViewModel model,
+        CancellationToken cancellationToken = default)
+    {
+        if (postId != model.PostId)
+        {
+            return BadRequest();
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.Website))
+        {
+            ModelState.AddModelError(string.Empty, "댓글을 등록할 수 없습니다.");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            var post = await boardRepository.GetPostAsync(postId, incrementViewCount: false, cancellationToken);
+            if (post is null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Title"] = post.Title;
+            return View("Details", new BoardPostDetailsViewModel
+            {
+                Post = post,
+                Comments = await boardRepository.GetCommentsAsync(postId, cancellationToken),
+                NewComment = model,
+                Delete = new BoardPostDeleteViewModel { Id = post.Id }
+            });
+        }
+
+        var commentId = await boardRepository.CreateCommentAsync(
+            model,
+            HttpContext.Connection.RemoteIpAddress?.ToString(),
+            Request.Headers["User-Agent"].ToString(),
+            cancellationToken);
+
+        if (commentId == 0)
+        {
+            return NotFound();
+        }
+
+        TempData["BoardMessage"] = "댓글이 등록되었습니다.";
+        return RedirectToComment(postId, commentId);
+    }
+
+    [HttpPost("{postId:int}/Comments/{commentId:int}/Edit")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditComment(
+        int postId,
+        int commentId,
+        BoardCommentEditViewModel model,
+        CancellationToken cancellationToken = default)
+    {
+        if (postId != model.PostId || commentId != model.Id)
+        {
+            return BadRequest();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            TempData["BoardError"] = "댓글 수정 내용을 확인해주세요.";
+            return RedirectToComment(postId, commentId);
+        }
+
+        var updated = await boardRepository.UpdateCommentAsync(model, cancellationToken);
+        TempData[updated ? "BoardMessage" : "BoardError"] = updated ? "댓글이 수정되었습니다." : "댓글 비밀번호가 일치하지 않습니다.";
+        return RedirectToComment(postId, commentId);
+    }
+
+    [HttpPost("{postId:int}/Comments/{commentId:int}/Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteComment(
+        int postId,
+        int commentId,
+        BoardCommentDeleteViewModel model,
+        CancellationToken cancellationToken = default)
+    {
+        if (postId != model.PostId || commentId != model.Id)
+        {
+            return BadRequest();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            TempData["BoardError"] = "댓글 삭제 비밀번호를 입력해주세요.";
+            return RedirectToComment(postId, commentId);
+        }
+
+        var deleted = await boardRepository.DeleteCommentAsync(model, cancellationToken);
+        TempData[deleted ? "BoardMessage" : "BoardError"] = deleted ? "댓글이 삭제되었습니다." : "댓글 비밀번호가 일치하지 않습니다.";
+        return RedirectToAction(nameof(Details), new { id = postId });
+    }
+
+    private IActionResult RedirectToComment(int postId, int commentId)
+    {
+        var url = Url.Action(nameof(Details), new { id = postId }) ?? $"/Board/{postId}";
+        return Redirect($"{url}#comment-{commentId}");
     }
 }

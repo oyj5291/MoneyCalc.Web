@@ -311,6 +311,7 @@ a.calculator-card:hover {
 .board-card,
 .board-form,
 .board-detail,
+.board-comments,
 .board-delete,
 .board-guide {
   background: #fff;
@@ -321,6 +322,7 @@ a.calculator-card:hover {
 
 .board-form,
 .board-detail,
+.board-comments,
 .board-delete,
 .board-guide {
   padding: 1.5rem;
@@ -409,6 +411,60 @@ a.calculator-card:hover {
   flex: 0 0 auto;
 }
 
+.board-comment-list {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.board-comment {
+  padding: 1rem;
+  background: #f8fafc;
+  border: 1px solid #edf1f7;
+  border-radius: 0.85rem;
+}
+
+.board-comment-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.board-comment-header strong {
+  margin-right: 0.75rem;
+}
+
+.board-comment-header span {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.board-comment-content {
+  color: #263247;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.board-comment-tools {
+  margin-top: 0.85rem;
+}
+
+.board-comment-tools summary {
+  color: #6c757d;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.board-comment-form {
+  padding-top: 1.25rem;
+  border-top: 1px solid #edf1f7;
+}
+
 .board-guide {
   color: #4f5b6e;
   line-height: 1.8;
@@ -451,6 +507,7 @@ a.calculator-card:hover {
   .policy-page,
   .board-form,
   .board-detail,
+  .board-comments,
   .board-delete,
   .board-guide {
     padding: 1.25rem;
@@ -483,6 +540,22 @@ a.calculator-card:hover {
 
   .board-delete-button {
     margin-top: 0.75rem;
+  }
+
+  .board-comment .input-group {
+    display: block;
+  }
+
+  .board-comment .input-group > .form-control,
+  .board-comment .input-group > .btn {
+    display: block;
+    width: 100%;
+    margin-left: 0;
+    border-radius: 0.375rem !important;
+  }
+
+  .board-comment .input-group > .btn {
+    margin-top: 0.5rem;
   }
 
   .footer {

@@ -5,6 +5,10 @@
     {
         <div class="alert alert-success" role="alert">@message</div>
     }
+    @if (TempData["BoardError"] is string error)
+    {
+        <div class="alert alert-danger" role="alert">@error</div>
+    }
 
     <article class="board-detail">
         <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 border-bottom pb-3 mb-4">
@@ -14,14 +18,109 @@
                 <div class="board-meta">
                     <span>글쓴이 @Model.Post.Author</span>
                     <span>@Model.Post.CreatedAt.LocalDateTime.ToString("yyyy.MM.dd HH:mm")</span>
+                    @if (Model.Post.UpdatedAt is not null)
+                    {
+                        <span>수정 @Model.Post.UpdatedAt.Value.LocalDateTime.ToString("yyyy.MM.dd HH:mm")</span>
+                    }
                     <span>조회 @Model.Post.ViewCount</span>
                 </div>
             </div>
-            <a class="btn btn-outline-secondary" asp-controller="Board" asp-action="Index">목록</a>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-primary" asp-controller="Board" asp-action="Edit" asp-route-id="@Model.Post.Id">수정</a>
+                <a class="btn btn-outline-secondary" asp-controller="Board" asp-action="Index">목록</a>
+            </div>
         </div>
 
         <div class="board-content">@Model.Post.Content</div>
     </article>
+
+    <section class="board-comments mt-4">
+        <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+            <h2 class="h5 fw-bold mb-0">댓글 @Model.Comments.Count</h2>
+            <span class="text-secondary small">댓글은 1,000자까지 입력할 수 있습니다.</span>
+        </div>
+
+        @if (Model.Comments.Count == 0)
+        {
+            <p class="text-secondary mb-4">아직 댓글이 없습니다.</p>
+        }
+        else
+        {
+            <div class="board-comment-list">
+                @foreach (var comment in Model.Comments)
+                {
+                    <article id="comment-@comment.Id" class="board-comment">
+                        <div class="board-comment-header">
+                            <div>
+                                <strong>@comment.Author</strong>
+                                <span>@comment.CreatedAt.LocalDateTime.ToString("yyyy.MM.dd HH:mm")</span>
+                                @if (comment.UpdatedAt is not null)
+                                {
+                                    <span>수정됨</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="board-comment-content">@comment.Content</div>
+                        <details class="board-comment-tools">
+                            <summary>댓글 수정/삭제</summary>
+                            <div class="row g-3 mt-1">
+                                <div class="col-lg-7">
+                                    <form asp-controller="Board" asp-action="EditComment" asp-route-postId="@Model.Post.Id" asp-route-commentId="@comment.Id" method="post">
+                                        <input type="hidden" name="Id" value="@comment.Id" />
+                                        <input type="hidden" name="PostId" value="@Model.Post.Id" />
+                                        <label class="form-label small" for="commentContent-@comment.Id">댓글 수정</label>
+                                        <textarea id="commentContent-@comment.Id" class="form-control" name="Content" maxlength="1000" rows="3">@comment.Content</textarea>
+                                        <div class="input-group mt-2">
+                                            <input class="form-control" type="password" name="Password" maxlength="40" autocomplete="current-password" placeholder="댓글 비밀번호" />
+                                            <button class="btn btn-outline-primary" type="submit">수정</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-lg-5">
+                                    <form asp-controller="Board" asp-action="DeleteComment" asp-route-postId="@Model.Post.Id" asp-route-commentId="@comment.Id" method="post">
+                                        <input type="hidden" name="Id" value="@comment.Id" />
+                                        <input type="hidden" name="PostId" value="@Model.Post.Id" />
+                                        <label class="form-label small" for="commentDeletePassword-@comment.Id">댓글 삭제</label>
+                                        <div class="input-group">
+                                            <input id="commentDeletePassword-@comment.Id" class="form-control" type="password" name="Password" maxlength="40" autocomplete="current-password" placeholder="댓글 비밀번호" />
+                                            <button class="btn btn-outline-danger" type="submit">삭제</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </details>
+                    </article>
+                }
+            </div>
+        }
+
+        <form class="board-comment-form" asp-controller="Board" asp-action="CreateComment" asp-route-postId="@Model.Post.Id" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+            <input name="Website" value="@Model.NewComment.Website" class="board-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <input name="PostId" type="hidden" value="@Model.Post.Id" />
+
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <label asp-for="NewComment.Author" class="form-label">글쓴이</label>
+                    <input id="NewComment_Author" name="Author" value="@Model.NewComment.Author" class="form-control" maxlength="20" placeholder="닉네임" />
+                    <span asp-validation-for="NewComment.Author" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="NewComment.Password" class="form-label">댓글 비밀번호</label>
+                    <input id="NewComment_Password" name="Password" class="form-control" type="password" maxlength="40" autocomplete="new-password" placeholder="4자 이상" />
+                    <span asp-validation-for="NewComment.Password" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mt-3">
+                <label asp-for="NewComment.Content" class="form-label">댓글</label>
+                <textarea id="NewComment_Content" name="Content" class="form-control" maxlength="1000" rows="4" placeholder="댓글을 입력하세요">@Model.NewComment.Content</textarea>
+                <span asp-validation-for="NewComment.Content" class="text-danger"></span>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-primary">댓글 등록</button>
+            </div>
+        </form>
+    </section>
 
     <div class="board-delete mt-4">
         <h2 class="h5 fw-bold">게시글 삭제</h2>
@@ -37,3 +136,7 @@
         </form>
     </div>
 </section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
