@@ -1,8 +1,8 @@
 @model SavingsCalculatorViewModel
 
 @{
-    ViewData["Title"] = "적금 계산기";
-    ViewData["Description"] = "월 납입액, 금리, 기간을 입력해 적금 원금합계, 세전·세후이자와 만기수령액을 계산해 보세요.";
+    ViewData["Title"] = "적금 계산기 | 세후 이자·만기수령액 계산";
+    ViewData["Description"] = "적금 계산기로 월 납입액, 금리, 기간, 단리·월복리 조건에 따른 원금합계, 세후이자와 만기수령액을 계산해 보세요.";
 
     var interestTypeName = Model.Result?.InterestType == SavingsInterestType.MonthlyCompound
         ? "월복리"

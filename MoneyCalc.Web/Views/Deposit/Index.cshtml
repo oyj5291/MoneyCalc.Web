@@ -1,8 +1,8 @@
 @model DepositCalculatorViewModel
 
 @{
-    ViewData["Title"] = "예금 계산기";
-    ViewData["Description"] = "예치금액, 금리, 기간과 단리 또는 월복리 방식을 입력해 세전이자, 세후이자, 만기수령액을 계산해 보세요.";
+    ViewData["Title"] = "예금 계산기 | 세후 이자·만기수령액 계산";
+    ViewData["Description"] = "예금 계산기로 예치금액, 금리, 기간, 단리·월복리·연복리 조건에 따른 세전이자, 세후이자와 만기수령액을 계산해 보세요.";
 
     var calculationTypeName = Model.Result?.InterestCalculationType switch
     {

@@ -1,8 +1,8 @@
 @model LoanCalculatorViewModel
 
 @{
-    ViewData["Title"] = "대출이자 계산기";
-    ViewData["Description"] = "원리금균등상환, 원금균등상환, 만기일시상환 방식별 월 납입액과 총이자를 계산해 보세요.";
+    ViewData["Title"] = "대출이자 계산기 | 원리금균등·원금균등 상환 계산";
+    ViewData["Description"] = "대출이자 계산기로 원리금균등상환, 원금균등상환, 만기일시상환의 월 납입액, 총이자와 상환 일정을 계산해 보세요.";
 
     var repaymentTypeName = Model.Result?.RepaymentType switch
     {
@@ -17,7 +17,7 @@
     <div class="col-xl-10">
         <div class="mb-4">
             <h1 class="h2 fw-bold">대출이자 계산기</h1>
-            <p class="text-secondary">상환 조건을 입력하면 월별 원금과 이자를 계산합니다.</p>
+            <p class="text-secondary">대출 원금, 금리, 기간과 상환 방식을 입력하면 월 납입액과 총이자를 계산합니다.</p>
         </div>
 
         <div class="card border-0 shadow-sm mb-4">

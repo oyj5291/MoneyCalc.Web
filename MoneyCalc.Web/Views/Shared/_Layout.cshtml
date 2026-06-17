@@ -3,13 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="@(ViewData["Description"] ?? "대출, 예금, 적금, 연봉을 쉽고 정확하게 계산하는 머니계산연구소입니다.")" />
-    <meta property="og:title" content="@ViewData["Title"] | 머니계산연구소" />
-    <meta property="og:description" content="@(ViewData["Description"] ?? "대출, 예금, 적금, 연봉을 쉽고 정확하게 계산하는 머니계산연구소입니다.")" />
+    @{
+        var pageTitle = ViewData["Title"]?.ToString();
+        var fullTitle = string.IsNullOrWhiteSpace(pageTitle) ? "머니계산연구소" : $"{pageTitle} | 머니계산연구소";
+        var pageDescription = ViewData["Description"]?.ToString() ?? "대출이자, 예금, 적금, 연봉 실수령액을 쉽고 정확하게 계산하는 머니계산연구소입니다.";
+    }
+    <meta name="description" content="@pageDescription" />
+    <meta property="og:title" content="@fullTitle" />
+    <meta property="og:description" content="@pageDescription" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" />
     <link rel="canonical" href="@($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}")" />
-    <title>@ViewData["Title"] | 머니계산연구소</title>
+    <title>@fullTitle</title>
     <link rel="icon" type="image/svg+xml" href="~/favicon.svg" asp-append-version="true" />
     <link rel="alternate icon" type="image/x-icon" href="~/favicon.ico" asp-append-version="true" />
     <link rel="apple-touch-icon" href="~/apple-touch-icon.png" asp-append-version="true" />

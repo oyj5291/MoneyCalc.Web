@@ -15,18 +15,20 @@ public class BoardController(IBoardRepository boardRepository) : Controller
         try
         {
             var model = await boardRepository.GetPostsAsync(page, PageSize, cancellationToken);
-            ViewData["Title"] = "자유게시판";
-            ViewData["Description"] = "머니계산연구소 자유게시판에서 금융 계산과 생활 금융 이야기를 나누세요.";
+            ViewData["Title"] = "자유게시판 | 금융 계산 질문과 정보 공유";
+            ViewData["Description"] = "머니계산연구소 자유게시판에서 대출, 예금, 적금, 연봉 계산 관련 질문과 생활 금융 정보를 자유롭게 나누세요.";
             return View(model);
         }
         catch (InvalidOperationException)
         {
-            ViewData["Title"] = "자유게시판";
+            ViewData["Title"] = "자유게시판 | 금융 계산 질문과 정보 공유";
+            ViewData["Description"] = "머니계산연구소 자유게시판에서 금융 계산 관련 질문과 정보를 나누세요.";
             return View(new BoardIndexViewModel { IsConfigured = false });
         }
         catch (Npgsql.NpgsqlException)
         {
-            ViewData["Title"] = "자유게시판";
+            ViewData["Title"] = "자유게시판 | 금융 계산 질문과 정보 공유";
+            ViewData["Description"] = "머니계산연구소 자유게시판에서 금융 계산 관련 질문과 정보를 나누세요.";
             return View(new BoardIndexViewModel { IsConfigured = false });
         }
     }
@@ -35,7 +37,7 @@ public class BoardController(IBoardRepository boardRepository) : Controller
     public IActionResult Write()
     {
         ViewData["Title"] = "자유게시판 글쓰기";
-        ViewData["Description"] = "머니계산연구소 자유게시판에 글을 작성합니다.";
+        ViewData["Description"] = "대출, 예금, 적금, 연봉 계산과 생활 금융 관련 질문이나 정보를 자유게시판에 작성하세요.";
         return View(new BoardPostCreateViewModel());
     }
 
@@ -44,6 +46,7 @@ public class BoardController(IBoardRepository boardRepository) : Controller
     public async Task<IActionResult> Write(BoardPostCreateViewModel model, CancellationToken cancellationToken = default)
     {
         ViewData["Title"] = "자유게시판 글쓰기";
+        ViewData["Description"] = "대출, 예금, 적금, 연봉 계산과 생활 금융 관련 질문이나 정보를 자유게시판에 작성하세요.";
 
         if (!string.IsNullOrWhiteSpace(model.Website))
         {
@@ -88,7 +91,7 @@ public class BoardController(IBoardRepository boardRepository) : Controller
         }
 
         ViewData["Title"] = post.Title;
-        ViewData["Description"] = "머니계산연구소 자유게시판 게시글입니다.";
+        ViewData["Description"] = $"머니계산연구소 자유게시판 게시글: {post.Title}";
         var comments = await boardRepository.GetCommentsAsync(id, cancellationToken);
         return View(new BoardPostDetailsViewModel
         {
@@ -108,7 +111,8 @@ public class BoardController(IBoardRepository boardRepository) : Controller
             return NotFound();
         }
 
-        ViewData["Title"] = "게시글 수정";
+        ViewData["Title"] = "자유게시판 게시글 수정";
+        ViewData["Description"] = "머니계산연구소 자유게시판 게시글의 제목과 본문을 수정합니다.";
         return View(new BoardPostEditViewModel
         {
             Id = post.Id,
@@ -126,7 +130,8 @@ public class BoardController(IBoardRepository boardRepository) : Controller
             return BadRequest();
         }
 
-        ViewData["Title"] = "게시글 수정";
+        ViewData["Title"] = "자유게시판 게시글 수정";
+        ViewData["Description"] = "머니계산연구소 자유게시판 게시글의 제목과 본문을 수정합니다.";
         if (!ModelState.IsValid)
         {
             return View(model);
